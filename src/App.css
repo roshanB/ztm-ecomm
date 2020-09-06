@@ -3,3 +3,8 @@ body {
   padding: 20px 60px;
   /* Tried_20_topandbottom_60_on_sides */
 }
+
+a {
+  text-decoration: none;
+  color: black;
+}
