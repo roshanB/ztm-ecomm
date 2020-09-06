@@ -1,9 +1,13 @@
 import React from "react";
 import "./menu-item.component.scss";
+import { withRouter } from "react-router-dom";
 
-const MenuItem = ({ title, imageUrl, size }) => {
+const MenuItem = ({ title, imageUrl, size, linkUrl, history, match }) => {
   return (
-    <div className={`${size} menu-item`}>
+    <div
+      className={`${size} menu-item`}
+      onClick={() => history.push(`${match.url}${linkUrl}`)}
+    >
       {/* Tried_hover_effect note that below two divs are siblings */}
       <div
         className="background-image"
@@ -17,5 +21,5 @@ const MenuItem = ({ title, imageUrl, size }) => {
     </div>
   );
 };
-
-export default MenuItem;
+// Tried_withRouter
+export default withRouter(MenuItem);
