@@ -6,18 +6,23 @@ import ShopPage from "./pages/shop/shop.component";
 import Header from "./components/header/header.component";
 import SignInAndSignUpPage from "./pages/sign-in-and-sign-up/sign-in-and-sign-up.component";
 import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
+import { connect } from "react-redux";
+import { setCurrentUser } from "./redux/user/user.actions";
 
 class App extends React.Component {
+  /* Tried_using_dispatch_to_props
   constructor() {
     super();
 
     this.state = {
       currentUser: null,
     };
-  }
+  }*/
   unSubscribeFromAuth = null;
 
   componentDidMount() {
+    const { setCurrentUser } = this.props;
+
     //Tried_auth_subscription
     this.unSubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       //Tried_this_is_google_user_object - this logs null when auth.signOut() is called
@@ -27,6 +32,12 @@ class App extends React.Component {
         const userRef = await createUserProfileDocument(userAuth);
         //Tried_onSnapshot_like_behaviour_subject_subscription
         userRef.onSnapshot((snapshot) => {
+          setCurrentUser({
+            id: snapshot.id,
+            ...snapshot.data(),
+          });
+
+          /* Tried_using_dispatch_to_props
           this.setState(
             {
               currentUser: {
@@ -36,9 +47,12 @@ class App extends React.Component {
             },
             () => console.log("state set with user from snapshot", this.state)
           );
+          */
         });
       } else {
-        this.setState({ currentUser: null });
+        setCurrentUser(null);
+        /* Tried_using_dispatch_to_props
+        this.setState({ currentUser: null }); */
       }
     });
   }
@@ -51,7 +65,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Header currentUser={this.state.currentUser} />
+        <Header />
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route path="/shop" component={ShopPage} />
@@ -62,4 +76,11 @@ class App extends React.Component {
   }
 }
 
-export default App;
+// Tried_mapDispatchToProps_map_state_passed_as_null
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(App);
