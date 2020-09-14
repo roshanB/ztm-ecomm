@@ -4,8 +4,10 @@ import "./header.styles.scss";
 import { ReactComponent as Logo } from "../../assets/crown.svg";
 import { auth } from "../../firebase/firebase.utils";
 import { connect } from "react-redux";
+import CartIcon from "../cart-icon/cart-icon.component";
+import CartDropdown from "../cart-dropdown/cart-dropdown.component";
 
-const Header = ({ currentUser }) => (
+const Header = ({ currentUser, hidden }) => (
   <div className="header">
     <Link to="/" className="logo-container">
       {/* Tried_how_logo_svg_used */}
@@ -27,14 +29,19 @@ const Header = ({ currentUser }) => (
           SIGN IN
         </Link>
       )}
+      <CartIcon />
     </div>
+    {/* Tried_CartDropdown_is_outside_above_div */}
+    {hidden ? null : <CartDropdown />}
   </div>
 );
 
 // Tried_state_is_root_reducer_state
-const mapStateToProps = (state) => {
+// Tried_observe_following_destructuring
+const mapStateToProps = ({ user: { currentUser }, cart: { hidden } }) => {
   return {
-    currentUser: state.user.currentUser, //Tried_left_side_prop_name
+    currentUser, //Tried_left_side_prop_name
+    hidden,
   };
 };
 
