@@ -22,7 +22,7 @@ export const removeItemFromCart = (cartItems, itemToRemove) => {
     if (itemFromCart.quantity > 1) {
       return cartItems.map((cartItem) => {
         if (cartItem.id === itemToRemove.id) {
-          //cartItem.quantity -= 1;
+          //cartItem.quantity -= 1; //Tried_mistake_this_did_not_update_quantity_in <> - following did
           return { ...cartItem, quantity: cartItem.quantity - 1 };
         }
         return cartItem;
